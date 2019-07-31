@@ -46,6 +46,10 @@ if [ -z $GRAPHITE_RELEASE ]; then
     GRAPHITE_RELEASE='1.0.2'
 fi
 
+if [[ ! $UBUNTU_RELEASE =~ 'Ubuntu 14.04' ]]; then
+  echo "Sorry, this is only supported for Ubuntu Linux 14.04."
+  exit 1
+fi
 if [[ -d $GRAPHITE_HOME ]]; then
   echo "Looks like you already have a Graphite installation in ${GRAPHITE_HOME}, aborting."
   exit 1
@@ -116,10 +120,10 @@ chmod 755 /etc/cron.hourly/graphite-build-index
 sudo -u www-data /opt/graphite/bin/build-index.sh
 
 # Install Grafana
-echo 'deb https://packagecloud.io/grafana/stable/debian/ wheezy main' > /etc/apt/sources.list.d/grafana.list
-curl https://packagecloud.io/gpg.key | apt-key add -
-apt-get update -y
-DEBIAN_FRONTEND=noninteractive apt-get install -y grafana
+wget https://dl.grafana.com/oss/release/grafana_6.2.5_amd64.deb 
+dpkg -i grafana_6.2.5_amd64.deb 
+apt-get update
+apt-get install grafana
 service grafana-server start
 sleep 5
 curl -X POST -H 'Content-Type: application/json' -u 'admin:admin' \
@@ -137,3 +141,4 @@ service collectd start
 service apache2 start
 service statsite start
 service apache2 restart
+
