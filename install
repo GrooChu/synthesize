@@ -120,8 +120,8 @@ chmod 755 /etc/cron.hourly/graphite-build-index
 sudo -u www-data /opt/graphite/bin/build-index.sh
 
 # Install Grafana
-echo 'deb https://packagecloud.io/grafana/stable/debian/ wheezy main' > /etc/apt/sources.list.d/grafana.list
-curl https://packagecloud.io/gpg.key | apt-key add -
+echo 'deb https://packages.grafana.com/oss/deb stable main' > /etc/apt/sources.list.d/grafana.list
+curl https://packages.grafana.com/gpg.key | apt-key add -
 apt-get update -y
 DEBIAN_FRONTEND=noninteractive apt-get install -y grafana
 service grafana-server start
